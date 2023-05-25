@@ -2,5 +2,5 @@
 using Termination;
 
 var canvas = new Canvas();
-Console.WriteLine(canvas.Test());
-canvas.Display(15,5);
+//Console.WriteLine(canvas.Test());
+while(true) {canvas.Display();}

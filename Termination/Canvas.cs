@@ -1,4 +1,6 @@
-﻿namespace Termination;
+﻿using System.Diagnostics;
+
+namespace Termination;
 public class Canvas
 {
     public string Test()
@@ -6,10 +8,16 @@ public class Canvas
         return "it works";
     }
 
+    public void Display()
+    {
+        var (x, y) = TermInfo.GetSize();
+        Display(x,y);
+    }
+
     public void Display(int x, int y)
     {
         var box = new System.Text.StringBuilder("");
-        
+
         for(int i=0; i<y; i++)
         {
             char columnL;
@@ -39,9 +47,6 @@ public class Canvas
             box.Append(columnR);
             box.AppendLine();
         }
-
-
-
         Console.WriteLine(box);
     }
 }
