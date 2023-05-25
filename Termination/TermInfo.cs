@@ -1,4 +1,4 @@
-//Credit to Mijyuoon for this class.
+//Credit to Mijyuoon for this class
 
 using System.Diagnostics;
 

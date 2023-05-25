@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿//TODO: Console.Clear does not do a full clear on linux systems
+
+using System.Diagnostics;
 
 namespace Termination;
 public class Canvas
@@ -13,6 +15,8 @@ public class Canvas
         var (x, y) = TermInfo.GetSize();
         Display(x,y);
     }
+
+    
 
     public void Display(int x, int y)
     {
@@ -45,9 +49,11 @@ public class Canvas
             box.Append(columnL);
             box.Append(row,x-2);
             box.Append(columnR);
-            box.AppendLine();
+
+            if(i<y-1)
+                box.AppendLine();
         }
-        Console.WriteLine(box);
+        Console.Write(box);
     }
 }
 
