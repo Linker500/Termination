@@ -1,18 +1,16 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Termination;
 
-var canvas = new Canvas();
-//Console.WriteLine(canvas.Test());
+var screen = new Screen();
+//Console.WriteLine(board.Test());
 
-
-
-while(true)
+while(false)
 {
     Console.Clear();
     var (x, y) = TermInfo.GetSize();
-    canvas.Display(x,y);
+    screen.Display();
     
-    while(true)
+    while(true) //TODO: this is for testing and a spam read loop is NOT good.
     {
         var (nX, nY) = TermInfo.GetSize();
         if(x != nX || y != nY)
@@ -20,3 +18,5 @@ while(true)
     }
 }
 
+screen.Display();
+//screen.DisplayCanvas(screen.canvases.First(),true);
