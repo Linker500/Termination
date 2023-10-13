@@ -1,3 +1,4 @@
+namespace Termination;
 public class Token
 {
     public char text {get; set;} //TODO: perhaps change this to a string along with other code (text wrapping) to support composed characters and similar
