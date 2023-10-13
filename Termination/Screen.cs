@@ -2,6 +2,7 @@
 
 namespace Termination;
 using System.Diagnostics;
+using Microsoft.VisualBasic;
 
 public class Screen
 {
@@ -9,26 +10,43 @@ public class Screen
     
     public Screen()
     {
-        canvases.Add("one",new Canvas(0,0,25,20));
+        canvases.Add("one",new Canvas(0,0,40,20));
         canvases.Add("two",new Canvas(50,20,100,100));
+        canvases.Add("three",new Canvas(175,30,30,30));
     }
 
+    //Renders all canvases
     public void Render()
     {
-
+        foreach(var (key, val) in canvases)
+            Render(val);
     }
 
-    public void Render(string name)
-    {
-        var canvas = canvases[name];
-        int length = canvas.frameBuffer.Length;
+    //Renders specific canvas by name
+    public void Render(string name) {Render(canvases[name]);}
 
+    //Renders specific canvas
+    public void Render(Canvas canvas)
+    {
+        int xo = canvas.xOffset;
+        int yo = canvas.yOffset;
+
+        for(int y=0; y<canvas.height; y++) //TODO: can this be a nested foreach? idk
+        {
+            for(int x=0; x<canvas.width; x++)
+            {
+                Console.SetCursorPosition(x+xo,y+yo);
+                Console.Write(canvas.frameBuffer[y][x].text);
+            }
+        }
     }
 
     public void Display()
     {
+        //Draw border Outline
         DisplayScreen();
         
+        //Cycle through Canvases, displaying them one by one.
         foreach(KeyValuePair<string, Canvas> entry in canvases)
             DisplayCanvas(entry.Value, true);
     }
