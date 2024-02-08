@@ -4,39 +4,45 @@ namespace Termination;
 using System.Diagnostics;
 using Microsoft.VisualBasic;
 
+/* 
+ * The screen class is the "screen" that we made out of the terminal. 
+ * It contains multiple Windows. These function as vaguely as windows in a graphical desktop environment do.
+ * They contain a coordinate position, a length, height, and then display data within it.
+ */
+
 public class Screen
 {
-    public readonly Dictionary<string,Canvas> canvases = new();
+    public readonly Dictionary<string,Window> Windows = new();
     
     public Screen()
     {
-        canvases.Add("one",new Canvas(0,0,40,20));
-        canvases.Add("two",new Canvas(50,20,100,100));
-        canvases.Add("three",new Canvas(175,30,30,30));
+        Windows.Add("one",new TextBlock(0,0,40,20));
+        Windows.Add("two",new TextBlock(50,20,100,100));
+        Windows.Add("three",new TextBlock(175,30,30,30));
     }
 
-    //Renders all canvases
+    //Renders all windows
     public void Render()
     {
-        foreach(var (key, val) in canvases)
+        foreach(var (key, val) in Windows)
             Render(val);
     }
 
     //Renders specific canvas by name
-    public void Render(string name) {Render(canvases[name]);}
+    public void Render(string name) {Render(Windows[name]);}
 
     //Renders specific canvas
-    public void Render(Canvas canvas)
+    public void Render(Window window)
     {
-        int xo = canvas.xOffset;
-        int yo = canvas.yOffset;
+        int xo = window.xOffset;
+        int yo = window.yOffset;
 
-        for(int y=0; y<canvas.height; y++) //TODO: can this be a nested foreach? idk
+        for(int y=0; y<window.height; y++) //TODO: can this be a nested foreach? idk
         {
-            for(int x=0; x<canvas.width; x++)
+            for(int x=0; x<window.width; x++)
             {
                 Console.SetCursorPosition(x+xo,y+yo);
-                Console.Write(canvas.frameBuffer[y][x].text);
+                Console.Write(window.FrameBuffer[y][x].text);
             }
         }
     }
@@ -47,8 +53,8 @@ public class Screen
         DisplayScreen();
         
         //Cycle through Canvases, displaying them one by one.
-        foreach(KeyValuePair<string, Canvas> entry in canvases)
-            DisplayCanvas(entry.Value, true);
+        foreach(KeyValuePair<string, Window> entry in Windows)
+            DisplayWindow(entry.Value, true);
     }
     public void DisplayScreen()
     {
@@ -56,12 +62,12 @@ public class Screen
         DisplayBox(0,0,w,h,false);
     }
 
-    private void DisplayCanvas(Canvas canvas, bool bold)
+    private void DisplayWindow(Window window, bool bold)
     {
-        int x = canvas.xOffset;
-        int y = canvas.yOffset;
-        int w = canvas.width;
-        int h = canvas.height;
+        int x = window.xOffset;
+        int y = window.yOffset;
+        int w = window.width;
+        int h = window.height;
 
         DisplayBox(x, y, w, h, bold);
     }
