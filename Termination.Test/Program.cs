@@ -1,15 +1,27 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 /*
-Hierachy:
-Screen:     The Entire screen
-Window:     a section of a screen, a "window".
-Textblock:  Text optimized window
-Canvas:     art optimized window
+ * TODO
+ * Console.CursorVisible = false; (kept on for now cuz debuf)
+ * Change titlebar text?
+ * Reduce buffer width/height? (padding around terminal). Generally bad for text but good for art. So idk figure out later.
+ * manually set console (desktop) window size?
+ * catch Ctrl + C to close program and to proper cleanup, or disable at all maybe?
+ * ReadKey() is function to read specific key presses?
+ */
 
-*/
+/*
+ *  Hierachy:
+ *      Screen:     The Entire screen
+ *          Window:     a section of a screen, a "window".
+ *              Textblock:  Text optimized window
+ *              Canvas:     art optimized window
+ *          Token: A single character an color information.
+ *
+ */
 
 using Termination;
+
 
 var screen = new Screen();
 //Console.WriteLine(board.Test());
@@ -35,6 +47,39 @@ while(true)
     }
 }
 
+//////////////////////////////////////////////
+
+// Display current Background color 
+Console.WriteLine("Default Background Color: {0}", 
+                    Console.BackgroundColor); 
+
+// Set the Background color to blue 
+Console.BackgroundColor 
+    = ConsoleColor.Blue; 
+
+// Display current Background color 
+Console.WriteLine("Changed Background Color: {0}", 
+                    Console.BackgroundColor); 
+
+//////////////////////////////////////////////
+
+// Get the list of available colors 
+// that can be changed 
+ConsoleColor[] consoleColors 
+    = (ConsoleColor[])ConsoleColor 
+            .GetValues(typeof(ConsoleColor)); 
+
+// Display the list 
+// of available console colors 
+Console.WriteLine("List of available "
+                    + "Console Colors:"); 
+foreach(var color in consoleColors) 
+    Console.WriteLine(color); 
+
+
+//////////////////////////////////////////////
+
+/*
 //screen.Display();
 //screen.DisplayCanvas(screen.canvases.First(),true);
 

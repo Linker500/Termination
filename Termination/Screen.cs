@@ -2,6 +2,7 @@
 
 namespace Termination;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using Microsoft.VisualBasic;
 
 /* 
@@ -42,7 +43,12 @@ public class Screen
             for(int x=0; x<window.width; x++)
             {
                 Console.SetCursorPosition(x+xo,y+yo);
-                Console.Write(window.FrameBuffer[y][x].text);
+
+                Token token = window.FrameBuffer[y][x];
+
+                Console.ForegroundColor = token.Color;
+                Console.BackgroundColor = token.BGColor;
+                Console.Write(token.Text);
             }
         }
     }

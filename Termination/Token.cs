@@ -1,18 +1,21 @@
 namespace Termination;
 public class Token
 {
-    public char text {get; set;} //TODO: perhaps change this to a string along with other code (text wrapping) to support composed characters and similar
-    public string ansi {get; set;}
+    public char Text {get; set;} //TODO: perhaps change this to a string along with other code (text wrapping) to support composed characters and similar
+    public ConsoleColor Color {get; set;}
+    public ConsoleColor BGColor {get; set;}
 
     public Token()
     {
-        text = ' ';
-        ansi = "";
+        Text = ' ';
+        Color = ConsoleColor.White;
+        BGColor = ConsoleColor.Black;
     }
     public Token(char newText)
     {
-        text = newText;
-        ansi = "";
+        Text = newText;
+        Color = ConsoleColor.White;
+        BGColor = ConsoleColor.Black;
     }
 
 }
