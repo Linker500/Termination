@@ -13,34 +13,84 @@ using Microsoft.VisualBasic;
 
 public class Screen
 {
-    public readonly Dictionary<string,Window> Windows = new();
+    public readonly Dictionary<string,Window> Windows = new(); //Dictionary of windows for this Screen
+    public int SizeX, SizeY; //Size of this screen
     
     public Screen()
     {
-        Windows.Add("one",new TextBlock(0,0,40,20));
-        Windows.Add("two",new TextBlock(50,20,100,100));
-        Windows.Add("three",new TextBlock(175,30,30,30));
+        (SizeX, SizeY) = TermInfo.GetSize();
+        Windows.Add("one",new TextBlock(0.0, 0.0, 0.3, 0.4));
+        Windows.Add("two",new TextBlock(0.05, 0.4, 0.6, 0.6));
+        Windows.Add("thr",new TextBlock(0.4, 0.04, 0.6, 0.35));
+        //Windows.Add("fou",new TextBlock(0.0, 0.4, 0.0, 0.0));
+
+        SolveWindows();
     }
 
-    //Renders all windows
+    public void SolveWindows() //TODO: throw exceptions for overlapping / impossible screens
+    {
+        (SizeX, SizeY) = TermInfo.GetSize();
+
+        //TODO: this math is off by one. It loses one column and one row.
+        foreach(var (key, val) in Windows)
+        {
+            Window window = val;
+            window.aXOffset = (int)(SizeX * window.XOffset);
+            window.aYOffset = (int)(SizeY * window.YOffset);
+            window.aWidth = (int)(SizeX * window.Width);
+            window.aHeight = (int)(SizeY * window.Height);
+        }
+    }
+
+    //Renders all Windows
     public void Render()
     {
         foreach(var (key, val) in Windows)
             Render(val);
     }
 
-    //Renders specific canvas by name
+    //Render specific Window by name
+    public void Render(string WinName)
+    {
+        Render(Windows[WinName]);
+    }
+
+    //Render given window
+    private void Render(Window Rendering) //TODO: if frame buffer somehow ends up with missing tokens then do an exception handler to just output them blank
+    {
+        Rendering.GenFrameBuffer();
+
+        //Set cursor to top left of window
+        //Move cursor along line by line printing character by character via it's frame buffer   
+        for(int y=0; y<Rendering.aHeight; y++)
+        {
+            Console.SetCursorPosition(Rendering.aXOffset,Rendering.aYOffset+y);
+            for(int x=0; x<Rendering.aWidth; x++)
+            {
+                Console.Write(Rendering.FrameBuffer[y][x].Text);
+            }
+        }
+    }
+
+    /*
+    //Renders all Windows
+    public void Render()
+    {
+        foreach(var (key, val) in Windows)
+            Render(val);
+    }
+    //Renders specific Window by name
     public void Render(string name) {Render(Windows[name]);}
 
-    //Renders specific canvas
+    //Renders specific Window
     public void Render(Window window)
     {
         int xo = window.xOffset;
         int yo = window.yOffset;
 
-        for(int y=0; y<window.height; y++) //TODO: can this be a nested foreach? idk
+        for(int y=0; y<window.MinHeight; y++) //TODO: can this be a nested foreach? idk
         {
-            for(int x=0; x<window.width; x++)
+            for(int x=0; x<window.MinWidth; x++)
             {
                 Console.SetCursorPosition(x+xo,y+yo);
 
@@ -53,27 +103,32 @@ public class Screen
         }
     }
 
+    */
+
+    //Draws border of Everything
     public void Display()
     {
         //Draw border Outline
         DisplayScreen();
         
-        //Cycle through Canvases, displaying them one by one.
+        //Cycle through Windows, displaying them one by one.
         foreach(KeyValuePair<string, Window> entry in Windows)
             DisplayWindow(entry.Value, true);
     }
+
+    //Draws border of the Screen
     public void DisplayScreen()
     {
-        var (w, h) = TermInfo.GetSize();
-        DisplayBox(0,0,w,h,false);
+        DisplayBox(0,0,SizeX,SizeY,false);
     }
 
+    //Draws border of specific Window
     private void DisplayWindow(Window window, bool bold)
     {
-        int x = window.xOffset;
-        int y = window.yOffset;
-        int w = window.width;
-        int h = window.height;
+        int x = window.aXOffset;
+        int y = window.aYOffset;
+        int w = window.aWidth;
+        int h = window.aHeight;
 
         DisplayBox(x, y, w, h, bold);
     }

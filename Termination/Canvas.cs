@@ -15,7 +15,7 @@ public class Canvas : Window
         
     }
 
-    public override void Fill(string text)
+    public override void GenFrameBuffer()
     {
 
     }
