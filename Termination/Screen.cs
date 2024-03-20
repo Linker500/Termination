@@ -11,6 +11,11 @@ using Microsoft.VisualBasic;
  * They contain a coordinate position, a length, height, and then display data within it.
  */
 
+
+// render loop thread
+// Detect resolution change → call rerender
+// 
+
 public class Screen
 {
     public readonly Dictionary<string,Window> Windows = new(); //Dictionary of windows for this Screen
@@ -27,11 +32,18 @@ public class Screen
         SolveWindows();
     }
 
-    public void SolveWindows() //TODO: throw exceptions for overlapping / impossible screens
+    public void LeChonkRenderingMethod() //TODO: temporary name to avoid conflicts
+    {
+        SolveWindows();
+        Render();
+    }
+
+    //TODO: make private
+    public void SolveWindows() //TODO: throw exceptions for overlapping / out of bound / impossible screens
     {
         (SizeX, SizeY) = TermInfo.GetSize();
 
-        //TODO: this math is off by one. It loses one column and one row.
+        //TODO: this math is off by one. It can lose one column and one row.
         foreach(var (key, val) in Windows)
         {
             Window window = val;
