@@ -39,14 +39,15 @@ public class TextBlock : Window
 
         List<Token> text = new(Data); //Text to manipulate; Copy of the Windows Data TODO: there is no reason we need to copy the array atm. Can probably just use a counting int to offset the values that I am deleting. I cannot be bothered to make that optimization right now.
         
-        for(int i=0; i<aHeight; i++) //TODO: integrate into below loop somehow? also foreach better. or maybe there is a better way to do this idk
-        {
-            FrameBuffer.Add(new());
-        }
+        // for(int i=0; i<aHeight; i++) //TODO: integrate into below loop somehow? also foreach better. or maybe there is a better way to do this idk
+        // {
+        //     FrameBuffer.Add(new());
+        // }
 
         //Split the input string into wrapped lines.
         for(int h=0; h<aHeight && text.Count != 0; h++) //Loop for every vertical line
         {
+            FrameBuffer.Add(new List<Token>());
             int nextBreak = -1; //Location of next break, either wrap or paragraph. If none is found, left at -1
             bool paragraph = false; //whether the next break is a text wrap or a paragraph break.
 
@@ -115,15 +116,22 @@ public class TextBlock : Window
             for(int i=0; i<FrameBuffer.Count; i++) //TODO: foreach
                 AlignRight(FrameBuffer[i]);
         }
+
+        if(AlignmentVert == 0) //Top aligned
+            AlignTop(FrameBuffer);
+        else if(AlignmentVert == 1) //Middle aligned
+            AlignMiddle(FrameBuffer);
+        else if(AlignmentVert == 2) //Bottom aligned
+            AlignBottom(FrameBuffer);
     }
 
     //TODO: all of these functions add padding. Make sure padding follows default window colors or w/e
+    //Horizontal Alignment functions
     private void AlignLeft(List<Token> list)
     {
         while(list.Count < aWidth)
             list.Add(new Token(' '));
     }
-
     private void AlignCenter(List<Token> list)
     {
         bool odd = true;
@@ -137,13 +145,37 @@ public class TextBlock : Window
             odd = !odd;
         }
     }
-
     private void AlignRight(List<Token> list)
     {
         while(list.Count < aWidth)
             list.Insert(0, new Token(' '));
     }
 
+    //Vertical Alignment functions
+    private void AlignTop(List<List<Token>> list)
+    {
+        while(list.Count < aHeight)
+            list.Add(GenerateBlankLine(aWidth));
+    }
+    private void AlignMiddle(List<List<Token>> list)
+    {
+        bool odd = true;
+        while(list.Count < aHeight)
+        {
+            if(odd)
+                list.Add(GenerateBlankLine(aWidth));
+            else
+                list.Insert(0,GenerateBlankLine(aWidth));
+            odd = !odd;
+        }
+
+        //list.Insert(0,GenerateBlankLine(aWidth));
+    }
+    private void AlignBottom(List<List<Token>> list)
+    {
+        while(list.Count < aHeight)
+            list.Insert(0,GenerateBlankLine(aWidth));
+    }
 
     /*
     private void AlignLeft(List<Token> list) //Sanity pass to remove left white space. There shouldn't be any, unless the end user makes a mistake

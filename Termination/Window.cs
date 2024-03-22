@@ -10,12 +10,14 @@ namespace Termination;
 
 public abstract class Window
 {
-    // public int MinWidth {get; set;} //Absolute minimum width of window       //TODO: implement
+    // public int MinWidth {get; set;} //Absolute minimum width of window       //TODO: implement?
     // public int MinHeight {get; set;} //Absolute minimum height of window
 
     public int Alignment {get; set;} //Alignment of body. 0 = left, 1 = center, 2 = right   //TODO: make enum?
+    public int AlignmentVert {get; set;} //Allignment of vertical body. 0 = up, 1 = center 3 = bottom //TODO: make enum? Also change name
 
-    // //X and Y offset from 0,0 on the screen. The coordinate of the window. 
+
+    //X and Y offset from 0,0 on the screen. The coordinate of the window. 
     public double XOffset {get; set;}
     public double YOffset {get; set;}
     
@@ -29,7 +31,6 @@ public abstract class Window
     public int aXOffset;
     public int aYOffset;
 
-    //public string Data {get; set;} //TODO: if color data is going to be implemented, this needs to be an unformatted array of tokens
     public List<Token> Data; //Unformatted raw window content
     public List<List<Token>> FrameBuffer {get; set;} //Window content formatted for window size
     
@@ -45,17 +46,13 @@ public abstract class Window
     public abstract void FillData(string input);
     public abstract void GenFrameBuffer();
 
-    public void GenerateBlank()
+    public List<Token> GenerateBlankLine(int width)
     {
-        FrameBuffer = new();
-        for(int y=0; y<aHeight; y++)
-        {
-            List<Token> line = new();
-            for(int x=0; x<aWidth; x++)
-            {
-                line.Add(new(' '));
-            }
-            FrameBuffer.Add(line);
-        }
+        List<Token> BlankLine = new();
+        
+        while(BlankLine.Count < width)
+            BlankLine.Add(new Token(' '));
+            
+        return BlankLine;
     }
 }
