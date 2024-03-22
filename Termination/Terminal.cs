@@ -98,7 +98,7 @@ public class Terminal
         Console.BackgroundColor = screen.BGColor;
     }
 
-    private void OnKeyPressed(object? sender, ConsoleKeyInfo key)
+    private void OnKeyPressed(object? sender, ConsoleKeyInfo key) //TODO: handle ctrl C
     {
         switch(key.Key)
         {

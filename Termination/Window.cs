@@ -13,7 +13,7 @@ public abstract class Window
     // public int MinWidth {get; set;} //Absolute minimum width of window       //TODO: implement
     // public int MinHeight {get; set;} //Absolute minimum height of window
 
-    public int Alignment {get; set;} //Alignment of body. 0 = left, 1 = center, 2 = right   //TODO: implement alignment
+    public int Alignment {get; set;} //Alignment of body. 0 = left, 1 = center, 2 = right   //TODO: make enum?
 
     // //X and Y offset from 0,0 on the screen. The coordinate of the window. 
     public double XOffset {get; set;}
@@ -29,8 +29,10 @@ public abstract class Window
     public int aXOffset;
     public int aYOffset;
 
-    public string Data {get; set;} //TODO: if color data is going to be implemented, this needs to be an unformatted array of tokens
-    public List<List<Token>> FrameBuffer {get; set;}
+    //public string Data {get; set;} //TODO: if color data is going to be implemented, this needs to be an unformatted array of tokens
+    public List<Token> Data; //Unformatted raw window content
+    public List<List<Token>> FrameBuffer {get; set;} //Window content formatted for window size
+    
     public Window(double x, double y, double w, double h)
     {
         FrameBuffer = new();
@@ -40,6 +42,7 @@ public abstract class Window
         Height = h;
     }
 
+    public abstract void FillData(string input);
     public abstract void GenFrameBuffer();
 
     public void GenerateBlank()

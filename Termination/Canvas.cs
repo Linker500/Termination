@@ -15,8 +15,12 @@ public class Canvas : Window
         
     }
 
+    public override void FillData(string input)
+    {
+        throw new NotImplementedException();
+    }
     public override void GenFrameBuffer()
     {
-
+        throw new NotImplementedException();
     }
 }
