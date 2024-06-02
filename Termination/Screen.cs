@@ -1,9 +1,6 @@
 ﻿//TODO: Console.Clear does not do a full clear on linux systems
 
 namespace Termination;
-using System.Diagnostics;
-using System.Security.Cryptography;
-using Microsoft.VisualBasic;
 
 /* 
  * The screen class is the "screen" that we made out of the terminal. 

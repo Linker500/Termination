@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace Termination;
 public class Terminal
 {
@@ -88,8 +90,17 @@ public class Terminal
             for(int x=0; x<Rendering.aWidth; x++)
             {
                 var token = Rendering.FrameBuffer[y][x];
-                Console.ForegroundColor = token.Color;
-                Console.BackgroundColor = token.BGColor;
+
+                ConsoleColor NewColor = DefFG;
+                ConsoleColor NewBGColor = DefBG;
+
+                if(token.Color != null) //TODO: perhaps wait for and catch an exception for the typecast being null than check like this.
+                    NewColor = (ConsoleColor)token.Color;
+                if(token.BGColor != null)
+                    NewBGColor = (ConsoleColor)token.BGColor;
+
+                Console.ForegroundColor = NewColor;
+                Console.BackgroundColor = NewBGColor;
                 Console.Write(token.Text);
             }
         }

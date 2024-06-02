@@ -31,18 +31,20 @@ public abstract class Window
     public int aXOffset;
     public int aYOffset;
 
-    public List<Token> Data; //Unformatted raw window content
+    public List<Token> Data {get; set;} //Unformatted raw window content
+
+    public List<List<Token>> Data2 {get; set;} //temporary
     public List<List<Token>> FrameBuffer {get; set;} //Window content formatted for window size
     
     public Window(double x, double y, double w, double h)
     {
+        Data = new();
         FrameBuffer = new();
         XOffset = x;
         YOffset = y;
         Width = w;
         Height = h;
     }
-
     public abstract void FillData(string input);
     public abstract void GenFrameBuffer();
 

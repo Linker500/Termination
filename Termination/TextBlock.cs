@@ -1,7 +1,3 @@
-using System.Formats.Asn1;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-
 namespace Termination;
 
 /*
@@ -17,16 +13,14 @@ public class TextBlock : Window
 {
     public TextBlock(double x, double y, double w, double h) : base(x,y,w,h)
     {
-        Data = new();
         Alignment = 0;
+        AlignmentVert = 0;
     }
 
-    public override void FillData(string input) //Converts input string into array of tokens. //TODO: standardize color foramtting or something idk
+    public override void FillData(string input) //Converts input string into array of tokens. //TODO: standardize color formatting or something idk
     {
         for(int i=0; i<input.Length; i++)
         {
-            Console.WriteLine(i);
-
             Data.Add(new Token(input[i]));
         }
     }
@@ -38,11 +32,6 @@ public class TextBlock : Window
         FrameBuffer = new();
 
         List<Token> text = new(Data); //Text to manipulate; Copy of the Windows Data TODO: there is no reason we need to copy the array atm. Can probably just use a counting int to offset the values that I am deleting. I cannot be bothered to make that optimization right now.
-        
-        // for(int i=0; i<aHeight; i++) //TODO: integrate into below loop somehow? also foreach better. or maybe there is a better way to do this idk
-        // {
-        //     FrameBuffer.Add(new());
-        // }
 
         //Split the input string into wrapped lines.
         for(int h=0; h<aHeight && text.Count != 0; h++) //Loop for every vertical line
