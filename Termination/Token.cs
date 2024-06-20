@@ -1,3 +1,5 @@
+using System.Dynamic;
+
 namespace Termination;
 public class Token
 {
@@ -20,11 +22,10 @@ public class Token
         Color = newColor;
     }
 
-    public Token(char newText, ConsoleColor? newColor, ConsoleColor? BGColor)
+    public Token(char newText, ConsoleColor? newColor, ConsoleColor? newBGColor)
     {
         Text = newText;
         Color = newColor;
-        BGColor = BGColor;
+        BGColor = newBGColor;
     }
-
 }

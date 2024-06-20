@@ -3,7 +3,6 @@ using System.Drawing;
 namespace Termination;
 public class Terminal
 {
-    
     public Screen screen {get; set;}
 
     public int SizeX, SizeY; //Size of terminal
@@ -98,7 +97,7 @@ public class Terminal
                     NewColor = (ConsoleColor)token.Color;
                 if(token.BGColor != null)
                     NewBGColor = (ConsoleColor)token.BGColor;
-
+                
                 Console.ForegroundColor = NewColor;
                 Console.BackgroundColor = NewBGColor;
                 Console.Write(token.Text);
@@ -153,7 +152,7 @@ public class Terminal
     }
 
     //Draws border of specific Window
-    public void BorderWindow(Window window, bool bold)
+    public static void BorderWindow(Window window, bool bold)
     {
         int x = window.aXOffset;
         int y = window.aYOffset;
@@ -164,7 +163,7 @@ public class Terminal
     }
 
     //Moves cursor to draw an arbitrarily sized border.
-    private void DrawBox(int x, int y, int w, int h, bool bold)
+    private static void DrawBox(int x, int y, int w, int h, bool bold)
     {
         char[] b; //Border lines
 
@@ -208,10 +207,9 @@ public class Terminal
         Console.Write(b[5]);
     }
 
-    private void CleanUp() //Cleans up terminal. Used before exiting
+    private static void CleanUp() //Cleans up terminal. Used before exiting
     {
-        Console.ForegroundColor = DefFG;
-        Console.BackgroundColor = DefBG;
+        Console.ResetColor();
         Console.CursorVisible = true;
         Console.Clear();
     }

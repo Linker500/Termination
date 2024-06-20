@@ -1,31 +1,43 @@
+using System.Runtime.CompilerServices;
+
 namespace Termination;
 public class Assets
 {
     //Dictionary<string, > Texts = new();
     public Dictionary<string,List<List<Token>>> Images = new();
 
-    String ImageDirectory;
-    
-    public Assets(String nImageDirectory)
+    string AssetPath;
+    public Assets(string nAssetPath)    //TODO: exception handling for file not found
     {
-        ImageDirectory = nImageDirectory;
-        Images.Add("Image",LoadImage());
-    }
+        AssetPath = nAssetPath;
+        // string[] textPaths  = Directory.GetDirectories(Path.Combine(AssetPath, "TXT"));
+        // foreach(string i in textPaths)
+        // {
+        //     LoadText(i);    
+        // }
 
+
+        string[] imagePaths = Directory.GetDirectories(Path.Combine(AssetPath, "IMG"));
+        foreach(string i in imagePaths)
+        {
+            LoadImage(i);    
+        }
+    }
     //private <type> LoadText ()
 
-    private List<List<Token>> LoadImage () //TODO: async in reading here we are reading a lot of stuff at once? //TODO: various exceptions for not having various parts. Perhaps have default ERRROR assets in case any files are not found (primarily/only(?) the art part).
+    private void LoadImage (string image) //TODO: async in reading here we are reading a lot of stuff at once? //TODO: various exceptions for not having various parts. Perhaps have default ERRROR assets in case any files are not found (primarily/only(?) the art part).
     {
-        //TODO: use better string concatanation on directories probably
-        string[] Info = File.ReadAllLines(ImageDirectory + "info.txt"); //TODO: is this even useful to have? Should we just calculate this ourself?
-        string[] Ascii = File.ReadAllLines(ImageDirectory + "ascii.txt");
-        string[] Color = File.ReadAllLines(ImageDirectory + "color.txt");
+        //The Image directory is "./<AssetPath>/IMG/<ImageName>"
+
+        string[] info  = File.ReadAllLines(Path.Combine(image, "info.txt")); //TODO: is this even useful to have? Should we just calculate this ourself?
+        string[] ascii = File.ReadAllLines(Path.Combine(image, "ascii.txt"));
+        string[] color = File.ReadAllLines(Path.Combine(image, "color.txt"));
         //string[] BGColor = File.ReadAllLines(ImageDirectory + "bgcolor.txt");
 
-        return ProccessImage(int.Parse(Info[0]),int.Parse(Info[1]),Ascii,Color);
+        Images.Add(Path.GetFileName(image), ProccessImage(int.Parse(info[0]),int.Parse(info[1]),ascii,color));
     }
 
-    //public static <idk> ProccessText  ()
+    //private static <idk> ProccessText  ()
     //{
 
     //}
@@ -34,6 +46,8 @@ public class Assets
     {
         List<List<Token>> Data = new();
 
+
+        //TODO: this is all gross
         for(int h=0; h<Height; h++)
         {
             Data.Add(new List<Token>());
