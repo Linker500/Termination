@@ -82,7 +82,67 @@ public class Assets
     //     return Data;
     // }
 
-    private ConsoleColor? TranslateColor (char input)
+private (byte,byte,byte)? TranslateColor (char input) //TODO: this translation is TEMPORARY until my file format is updated for ansi!
+    {
+        switch (input)
+        {
+            case ' ':
+                return null;
+
+            case 'w': //White
+                return (242,242,242);
+
+            case 'a': //Gray
+                return (204,204,204);
+
+            case 'A': //Dark Gray
+                return (118,188,188);
+
+            case 'k': //Black
+                return (12,12,12);
+            
+            case 'r': //Red
+                return (231,72,86);
+
+            case 'y': //Yellow
+                return (249,241,165);
+            
+            case 'g': //Green
+                return (22,198,12);
+
+            case 'b': //Blue
+                return (59,120,255);
+
+            case 'c': //Cyan
+                return (97,214,214);
+
+            case 'm': //Magenta
+                return (180,0,158);
+
+            case 'R': //Dark Red
+                return (197,15,31);
+            
+            case 'Y': //Dark Yellow
+                return (193,156,0);
+            
+            case 'G': //Dark Green
+                return (19,161,14);
+
+            case 'B': //Dark Blue
+                return (0,55,218);
+
+            case 'C': //Dark Cyan
+                return (58,150,221);
+
+            case 'M': //Dark Magenta
+                return (136,23,152);
+            
+            default: //TODO: throw exception or warning somewhere maybe?
+                return null;
+        }
+
+    }
+    private ConsoleColor? OLD_TranslateColor (char input)
     {
         switch (input)
         {

@@ -42,8 +42,8 @@ screen.Windows.Add("info", info);
 screen.Windows.Add("desc", desc);
 screen.Windows.Add("ui", ui);
 
-Assets TileMap = new("./IMGS/Map-Example/");
-map.Data2 = TileMap.Images["Image"];
+Assets TileMap = new("./DATA/Map-Example/");
+map.Data2 = TileMap.Images["Map"];
 
 desc.FillData("The vast open plains of the valley spill out in front of you. This is generic description text. How is it? I dunno. This is better than lorem ipsum I guess. Did I spell that right? I don't care.");
 info.FillData("First Day¶Noon¶Sunny¶293.7 degrees (kelvin)");

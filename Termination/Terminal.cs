@@ -1,5 +1,3 @@
-using System.Drawing;
-
 namespace Termination;
 public class Terminal
 {
@@ -7,8 +5,11 @@ public class Terminal
 
     public int SizeX, SizeY; //Size of terminal
 
-    public ConsoleColor DefFG = ConsoleColor.White; //User's default foreground color. TODO: derive from user's terminal at start
-    public ConsoleColor DefBG = ConsoleColor.Black; //User's default background color.
+    //TODO: derive default colors from user's terminal at start? Also make work for non true color!! Truecolor absolute white and black are temporary
+    public (byte,byte,byte) DefFG = (255,255,255); //User's default foreground color. 
+    //public ConsoleColor DefFG = ConsoleColor.White;
+    public (byte,byte,byte) DefBG = (0,0,0); //User's default background color.
+    //public ConsoleColor DefBG = ConsoleColor.Black;
 
     public bool EnableInput {get; set;} = true; //Whether to recieve input at all
     public bool EchoInput {get; set;} = false; //Whether to print the user input
@@ -89,18 +90,27 @@ public class Terminal
             for(int x=0; x<Rendering.aWidth; x++)
             {
                 var token = Rendering.FrameBuffer[y][x];
-
-                ConsoleColor NewColor = DefFG;
-                ConsoleColor NewBGColor = DefBG;
-
-                if(token.Color != null) //TODO: perhaps wait for and catch an exception for the typecast being null than check like this.
-                    NewColor = (ConsoleColor)token.Color;
-                if(token.BGColor != null)
-                    NewBGColor = (ConsoleColor)token.BGColor;
                 
-                Console.ForegroundColor = NewColor;
-                Console.BackgroundColor = NewBGColor;
-                Console.Write(token.Text);
+                (byte,byte,byte) NewFGColor = DefFG;
+                (byte,byte,byte) NewBGColor = DefBG;
+                // ConsoleColor NewColor = DefFG;
+                // ConsoleColor NewBGColor = DefBG;
+
+                // if(token.Color != null) //TODO: perhaps wait for and catch an exception for the typecast being null than check like this.
+                //     NewColor = (ConsoleColor)token.Color;
+                // if(token.BGColor != null)
+                //     NewBGColor = (ConsoleColor)token.BGColor;
+                
+                // Console.ForegroundColor = NewColor;
+                // Console.BackgroundColor = NewBGColor;
+
+                string? ansi = token.GetAnsi(); //TODO: !!! Check if next character has different properties and colors and if so don't change it, since ansi code changes are probably slow!
+                
+                //TODO: concatanation like this is gross right? possibly use something else and just combine the string into one final string that is printed
+                if(ansi != null)
+                    Console.Write(token.GetAnsi() + token.Text + "\x1b[0m");  //TODO: this hard coded ansi reset is NOT CORRECT and is temporary. It should restet to the terminals DEFAULT colors, but that is not implemented yet
+                else
+                    Console.Write(token.Text);
             }
         }
 
@@ -142,13 +152,13 @@ public class Terminal
         
         //Cycle through Windows, displaying them one by one.
         foreach(KeyValuePair<string, Window> entry in screen.Windows)
-            BorderWindow(entry.Value, true);
+            BorderWindow(entry.Value, false);
     }
 
     //Draws border of the Screen
     public void BorderScreen()
     {
-        DrawBox(0,0,SizeX,SizeY,false);
+        DrawBox(0,0,SizeX,SizeY,true);
     }
 
     //Draws border of specific Window
