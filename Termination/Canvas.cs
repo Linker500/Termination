@@ -4,9 +4,9 @@ namespace Termination;
 
 /*
  * Canvas is a type of window that's data is defined and addressed absolutely.
- * It is designed to display things like pixel art.
+ * It is designed to display things like ASCII art.
  * A canvas does not wrap. It merely cuts off the displayed data where appropiate.
- * If we wrapped instead, it would completely destroy the any art of structure you make of text.
+ * If we wrapped instead, it would completely destroy the structure of any art you make.
  */
 public class Canvas : Window
 {
@@ -25,20 +25,20 @@ public class Canvas : Window
 
         if(Alignment == 0) //Left aligned
         {
-            for(int i=0; i<FrameBuffer.Count; i++) //TODO: foreach
-                AlignLeft(FrameBuffer[i]);
+            foreach(var i in FrameBuffer)
+                AlignLeft(i);
         }
 
         else if(Alignment == 1) //Center aligned
         {
-            for(int i=0; i<FrameBuffer.Count; i++) //TODO: foreach
-                AlignCenter(FrameBuffer[i]);
+            foreach(var i in FrameBuffer)
+                AlignCenter(i);
         }
 
         else if(Alignment == 2) //Right aligned
         {
-            for(int i=0; i<FrameBuffer.Count; i++) //TODO: foreach
-                AlignRight(FrameBuffer[i]);
+            foreach(var i in FrameBuffer)
+                AlignRight(i);
         }
 
         if(AlignmentVert == 0) //Top aligned

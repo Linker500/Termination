@@ -1,9 +1,8 @@
 namespace Termination;
 public class Terminal
 {
-    public Screen screen {get; set;}
-
-    public int SizeX, SizeY; //Size of terminal
+    public Screen? screen {get; set;}
+    private int SizeX, SizeY; //Size of terminal
 
     //TODO: derive default colors from user's terminal at start? Also make work for non true color!! Truecolor absolute white and black are temporary
     public (byte,byte,byte) DefFG = (255,255,255); //User's default foreground color. 
@@ -13,15 +12,14 @@ public class Terminal
 
     public bool EnableInput {get; set;} = true; //Whether to recieve input at all
     public bool EchoInput {get; set;} = false; //Whether to print the user input
-    
+    public bool ShowDebug = false; //Display cursor and window boundaries?
+
     public event EventHandler<ConsoleKeyInfo>? KeyPressed; //Event for when key is pressed
-    private bool ShowDebug = false; //Display cursor and window boundaries?
 
     public Terminal()
     {
         (SizeX, SizeY) = TermInfo.GetSize();
-        KeyPressed += OnKeyPressed;
-        screen = new();
+        //KeyPressed += OnKeyPressed;
     }
 
     public void Start()
@@ -44,34 +42,17 @@ public class Terminal
     }
 
     //Render Screen
-    private void Render() //TODO: make cross platform detector of window size change to automate rerendering
+    public void Render() //TODO: make cross platform detector of window size change to automate rerendering
     {
-        // while(true)
-        // {
-        //     Console.Clear();
-        //     var (x, y) = TermInfo.GetSize();
-        //     screen.SolveWindows();
-        //     screen.Display();
-        //     screen.Render("one");
-        //     screen.Render("two");
-        //     screen.Render("thr");
-        //     //screen.Display();
+        (SizeX, SizeY) = TermInfo.GetSize(); //Update size of console
+        Console.CursorVisible = ShowDebug; //Set cursor visibility if debug mode
+        Console.Clear(); //Clear terminal
+        screen.SolveWindows(SizeX,SizeY); //Calculate window sizes per screen resolution
 
-        //     while(true) //TODO: this is for testing and a spam read loop is NOT good.
-        //     {
-        //         var (nX, nY) = TermInfo.GetSize();
-        //         if(x != nX || y != nY)
-        //             break;
-        //     }
-        // }
-        (SizeX, SizeY) = TermInfo.GetSize();
-        Console.CursorVisible = ShowDebug;
-        Console.Clear();
-        screen.SolveWindows(SizeX,SizeY);
-        foreach(var (key, val) in screen.Windows)
+        foreach(var (key, val) in screen.Windows) //Display each window in series
             RenderWindow(val);
         
-        if(ShowDebug)
+        if(ShowDebug) //Draw window borders if debug is enabled
         {
             Border();
         }
@@ -114,34 +95,14 @@ public class Terminal
             }
         }
 
-        Console.ForegroundColor = screen.FGColor;
-        Console.BackgroundColor = screen.BGColor;
+        // Console.ForegroundColor = screen.FGColor;
+        // Console.BackgroundColor = screen.BGColor;
     }
 
-    private void OnKeyPressed(object? sender, ConsoleKeyInfo key) //TODO: handle ctrl C
+    public void Exit()
     {
-        switch(key.Key)
-        {
-            case ConsoleKey.D:
-            {
-                ShowDebug = !ShowDebug;
-                break;
-            }
-
-            case ConsoleKey.X:
-            {
-                CleanUp();
-                Environment.Exit(0);
-                break;
-            }
-
-            case ConsoleKey.R:
-            {
-                Render();
-                break;
-            }
-
-        }
+        CleanUp();
+        Environment.Exit(0);
     }
 
     //Draws border of Everything
